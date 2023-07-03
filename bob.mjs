@@ -23,13 +23,11 @@ import { Listr } from 'listr2';
 import fs from 'fs-extra';
 import * as esbuild from 'esbuild';
 
-const manifestShared = JSON.parse(fs.readFileSync('./manifest.shared.json', 'utf8'));
-const manifestChrome = JSON.parse(fs.readFileSync('./manifest.chrome.json', 'utf8'));
-const manifestFirefox = JSON.parse(fs.readFileSync('./manifest.firefox.json', 'utf8'));
+const manifest = JSON.parse(fs.readFileSync('./manifest.firefox.json', 'utf8'));
 const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 
 const extensionVersion = packageJson.version;
-assert(extensionVersion === manifestShared.version, 'package.json and manifest.shared versions match');
+assert(extensionVersion === manifest.version, 'package.json and manifest versions match');
 
 // FIXME: Probably use path library instead of string manipulation?
 
@@ -52,9 +50,7 @@ const sourceFilesForReview = [
   './src',
   './bob.mjs',
   './LICENSE',
-  './manifest.chrome.json',
-  './manifest.firefox.json',
-  './manifest.shared.json',
+  './manifest.json',
   './package.json',
   './README.md',
   'tsconfig.json',
@@ -86,7 +82,8 @@ const {
     },
   },
 });
-assert(browser === 'chrome' || browser === 'firefox', 'browser is valid');
+// this fork is only relevant to firefox
+assert(/*browser === 'chrome' ||*/ browser === 'firefox', 'browser is valid, (firefox only)');
 
 if (dev) {
   console.log('🔨 Building development version, skipping some steps...');
@@ -149,12 +146,7 @@ const tasks = new Listr([
     // Do this before running esbuild so we can insert the correct host URLs.
     title: 'Merge manifests',
     task: (ctx) => {
-      ctx.manifest = browser === 'chrome' ? manifestChrome : manifestFirefox;
-      // Overwrite shared settings with browser based values.
-      ctx.manifest = {
-        ...manifestShared,
-        ...ctx.manifest,
-      };
+      ctx.manifest = manifest;
     },
   },
   {
@@ -166,11 +158,18 @@ const tasks = new Listr([
       // (?:\*\.)? Matches an optional *. subdomain wildcard.
       // ([^/]+) Captures the hostname; any sequence of characters that is not a forward slash.
       // (?:\/|$) Matches the end of the URL (either a forward slash or the end of the string).
-      ctx.hostPermissionUrls = ctx.manifest.host_permissions.map((permission) => {
+      ctx.hostPermissionUrls = ctx.manifest.permissions.map((permission) => {
         const match = permission.match(/^\*?:?\/\/(?:\*\.)?([^/]+)(?:\/|$)/);
         return match ? match[1] : null;
       });
     },
+  },
+  {
+    title: 'Filter non-URLs from host permissions',
+    task: (ctx) => {
+      // weird workaround because i have no idea what i am doing
+      ctx.hostPermissions = ctx.manifest.permissions.filter(permission => /^(\*:\/\/)/.test(permission))
+    }
   },
   {
     title: 'Run esbuild',
@@ -188,7 +187,7 @@ const tasks = new Listr([
           'process.env.version': `'${extensionVersion}'`,
           'process.env.hash': `'${ctx.gitHeadShortHash}'`,
           'process.env.buildTime': JSON.stringify(new Date()),
-          'process.env.hostPermissions': JSON.stringify(ctx.manifest.host_permissions),
+          'process.env.hostPermissions': JSON.stringify(ctx.hostPermissions),
           'process.env.hostPermissionUrls': JSON.stringify(ctx.hostPermissionUrls),
         },
       };
@@ -227,7 +226,7 @@ const tasks = new Listr([
     title: 'Create zip file',
     skip: () => (!release || dev),
     task: (ctx) => {
-      const zipName = `custombangsearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}.zip`;
+      const zipName = `custombangsearchmobile-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}.zip`;
       return execa('7z', ['a', `-tzip ${zipName}`, `${buildPath}/*`], { shell: true });
     },
   },
@@ -235,7 +234,7 @@ const tasks = new Listr([
     title: 'Create source zip file for review',
     skip: () => (!release || dev),
     task: (ctx) => {
-      const zipName = `custombangsearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}-source.zip`;
+      const zipName = `custombangsearchmobile-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}-source.zip`;
       return execa('7z', ['a', `-tzip ${zipName}`, `${sourceFilesForReview.join(' ')}`], { shell: true });
     },
   },

@@ -1,16 +1,10 @@
-# ![](./images/icons/icon_28.png) Custom Bang Search
+# ![](./images/icons/icon_28.png) Custom Bang Search (Firefox Mobile)
 
-[![Firefox Add-On version](https://img.shields.io/amo/v/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
-[![Firefox Add-On rating](https://img.shields.io/amo/rating/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
-[![Firefox Add-On user count](https://img.shields.io/amo/users/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
-[![Chrome extension version](https://img.shields.io/chrome-web-store/v/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
-[![Chrome extension rating](https://img.shields.io/chrome-web-store/rating/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
-[![Chrome extension user count](https://img.shields.io/chrome-web-store/users/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
+A browser extension to use custom DuckDuckGo-like bangs directly from the address bar. 
 
-[![Firefox Add-On link](./images/firefox.png)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
-[![Chrome Web Store link](./images/chrome.png)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
+This is a very crude fix for that allows the extension to run on firefox mobile properly.  As of manifest v3 all `host_permissions` are now forced as optional. [Firefox for Android does not support the permissions API properly](https://developer.mozilla.org/en-US/docs/Web/API/Permissions_API), meaning that you cannot use `permissions.request` to enable these optional permissions. My crude fix is to backport to manifest v2 to force the permissions when installing the add-on. 
 
-A browser extension to use custom DuckDuckGo-like bangs directly from the address bar.
+This is mostly for my own personal use. YMMV.
 
 ## Example Searches
 
@@ -80,10 +74,10 @@ CBS uses the `webRequest.onBeforeRequest` event listener to listen for requests 
 ### Building
 
 ```bash
-git clone https://github.com/psidex/CustomBangSearch.git
-cd CustomBangSearch
+git clone https://github.com/psidex/CustomBangSearchMobile.git
+cd CustomBangSearchMobile
 npm install
-npm run build-firefox OR build-firefox-release OR build-chrome OR build-chrome-release
+npm run build-firefox OR build-firefox-release
 ```
 
 This produces a `build` directory containing the compiled JavaScript, and if building the release version, 2 zip files in the root of the project that can be uploaded to the browser web extension stores.

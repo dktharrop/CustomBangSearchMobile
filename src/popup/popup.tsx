@@ -9,7 +9,6 @@ import browser from 'webextension-polyfill';
 
 import theme from '../lib/theme';
 import MiscButtons from '../lib/components/MiscButtons';
-import PermissionsRequester from '../lib/components/PermissionsRequester';
 import { dev, version } from '../lib/esbuilddefinitions';
 
 import DevTools from './devtools';
@@ -21,7 +20,6 @@ function App(): React.ReactElement {
       <Text>{`v${version}`}</Text>
       <MiscButtons />
       <Button variant="outline" onClick={() => { browser.runtime.openOptionsPage(); }}>Options</Button>
-      <PermissionsRequester closeWindow />
       {dev && <DevTools />}
     </VStack>
   );
