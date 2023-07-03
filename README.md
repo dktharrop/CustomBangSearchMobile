@@ -1,5 +1,7 @@
 # ![](./images/icons/icon_28.png) Custom Bang Search (Firefox Mobile)
 
+[![Firefox Add-On link](./images/firefox.png)](https://addons.mozilla.org/en-US/firefox/addon/custom-bang-search-mobile/)
+
 A browser extension to use custom DuckDuckGo-like bangs directly from the address bar. 
 
 This is a very crude fix for that allows the extension to run on firefox mobile properly.  As of manifest v3 all `host_permissions` are now forced as optional. [Firefox for Android does not support the permissions API properly](https://developer.mozilla.org/en-US/docs/Web/API/Permissions_API), meaning that you cannot use `permissions.request` to enable these optional permissions. My crude fix is to backport to manifest v2 to force the permissions when installing the add-on. 
