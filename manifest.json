@@ -31,7 +31,7 @@
         "96": "images/icons/icon_96.png",
         "128": "images/icons/icon_128.png"
       },
-      "default_title": "Custom Bang Search (Mobile)",
+      "default_title": " (Mobile)",
       "default_popup": "src/popup/popup.html"
     },
     "background": {
@@ -41,7 +41,7 @@
     },
     "browser_specific_settings": {
       "gecko": {
-        "id": "{b67c3a9a-b2a2-4fca-af95-7e7a38f3822e}"
+        "id": "{d123f6d6-3a0f-4a73-977e-522ac6ef7713}"
       }
     }
   }

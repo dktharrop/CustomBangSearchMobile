@@ -16,7 +16,7 @@ import DevTools from './devtools';
 function App(): React.ReactElement {
   return (
     <VStack>
-      <Heading>Custom Bang Search</Heading>
+      <Heading>Custom Bang Search (Mobile)</Heading>
       <Text>{`v${version}`}</Text>
       <MiscButtons />
       <Button variant="outline" onClick={() => { browser.runtime.openOptionsPage(); }}>Options</Button>
