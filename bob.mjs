@@ -23,7 +23,7 @@ import { Listr } from 'listr2';
 import fs from 'fs-extra';
 import * as esbuild from 'esbuild';
 
-const manifest = JSON.parse(fs.readFileSync('./manifest.firefox.json', 'utf8'));
+const manifest = JSON.parse(fs.readFileSync('./manifest.json', 'utf8'));
 const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 
 const extensionVersion = packageJson.version;
