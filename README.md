@@ -74,7 +74,7 @@ CBS uses the `webRequest.onBeforeRequest` event listener to listen for requests 
 ### Building
 
 ```bash
-git clone https://github.com/psidex/CustomBangSearchMobile.git
+git clone https://github.com/dktharrop/CustomBangSearchMobile.git
 cd CustomBangSearchMobile
 npm install
 npm run build-firefox OR build-firefox-release
