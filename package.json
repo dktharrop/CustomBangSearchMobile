@@ -9,8 +9,8 @@
     "tsc-lint": "npx tsc -noEmit",
     "build-firefox": "node ./bob.mjs -d -b firefox",
     "build-firefox-release": "node ./bob.mjs -r -b firefox",
-    "build-chrome": "node ./bob.mjs -d -b chrome",
-    "build-chrome-release": "node ./bob.mjs -r -b chrome"
+    "build-chrome": "echo \"Only Firefox supported\"",
+    "build-chrome-release": "echo \"Only Firefox supported\""
   },
   "repository": {
     "type": "git",
